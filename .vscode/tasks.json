@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ROS Humble Shell (overlay)",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/humble/setup.bash; [ -f /work/install/setup.bash ] && source /work/install/setup.bash; cd /work; exec bash'",
+      "presentation": { "panel": "new", "focus": true, "showReuseMessage": false },
+      "problemMatcher": [],
+      "runOptions": { "instanceLimit": 20 }
+    },
+    {
+      "label": "ROS Base (Humble only)",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/humble/setup.bash; cd /work; exec bash'",
+      "presentation": { "panel": "new", "focus": true, "showReuseMessage": false },
+      "problemMatcher": [],
+      "runOptions": { "instanceLimit": 20 }
+    },
+    {
+      "label": "rosdep install",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/humble/setup.bash; cd /work; rosdep install --from-paths src -y --ignore-src'",
+      "problemMatcher": []
+    },
+    {
+      "label": "colcon build",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/humble/setup.bash; cd /work; colcon build --symlink-install'",
+      "problemMatcher": []
+    }
+  ]
+}

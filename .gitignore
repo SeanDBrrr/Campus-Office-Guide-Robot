@@ -2,6 +2,7 @@
 /build/
 /install/
 /log/
+/.colcon/
 
 # Catch nested colcon/extra build dirs
 **/build/
@@ -39,6 +40,9 @@
 **/*.out
 **/*.elf
 
+# C/C++ analysis caches (optional)
+.clangd/
+
 # Optional (often regenerated; keep if your tooling needs it)
 /compile_commands.json
 **/compile_commands.json
@@ -48,6 +52,16 @@ __pycache__/
 **/*.pyc
 .venv/
 venv/
+
+# -------------Python tooling caches------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+**/*.egg-info
+dist/
+.cache/
 
 # ---------- VS Code ----------
 .vscode/*

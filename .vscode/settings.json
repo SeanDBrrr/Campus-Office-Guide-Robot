@@ -1,0 +1,42 @@
+{
+  // Always open a ROS-sourced terminal with the + button
+  "terminal.integrated.profiles.linux": {
+    "ROS Humble": {
+      "path": "/bin/bash",
+      "args": [
+        "-lc",
+        "source /opt/ros/humble/setup.bash; [ -f ${workspaceFolder}/install/setup.bash ] && source ${workspaceFolder}/install/setup.bash; cd ${workspaceFolder}; exec bash -i"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "ROS Humble",
+
+  // Don’t kill existing terminals when re-running tasks
+  "task.terminal.reuseOnRerun": false,
+
+  // Keep build artifacts out of the Explorer
+  "files.exclude": {
+    "**/build": true,
+    "**/install": true,
+    "**/log": true
+  },
+
+  // C/C++ IntelliSense
+  // Use CMake Tools to pick up compile_commands.json from each package build dir after colcon builds.
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "C_Cpp.intelliSenseEngineFallback": "Enabled",
+
+  // CMake Tools hints (optional, helps ensure compile_commands.json is generated)
+  "cmake.configureOnOpen": false,
+  "cmake.configureSettings": {
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+  },
+
+  // Python: usually PYTHONPATH comes from sourcing install/setup.bash.
+  // To include IntelliSense help, leave this off or keep it minimal:
+  // "python.analysis.extraPaths": [
+  //   "/opt/ros/humble/lib/python*/site-packages",
+  //   "${workspaceFolder}/install/*/lib/python*/site-packages"
+  // ],
+  "python.defaultInterpreterPath": "/usr/bin/python3"
+}

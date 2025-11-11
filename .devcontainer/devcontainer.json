@@ -1,0 +1,29 @@
+{
+  "name": "ROS 2 Humble (pkg repo)",
+  "image": "osrf/ros:humble-desktop",
+  "runArgs": ["--network=host"],
+  "workspaceFolder": "/work",
+  "mounts": ["source=${localWorkspaceFolder},target=/work,type=bind"],
+  "containerEnv": {
+    "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp",
+    "ROS_DOMAIN_ID": "17"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode",
+      "uid": 1000,
+      "gid": 1000
+    }
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3-colcon-common-extensions ros-humble-rmw-cyclonedds-cpp && bash -lc 'source /opt/ros/humble/setup.bash && rosdep update'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-iot.vscode-ros",
+        "ms-vscode.cpptools",
+        "ms-python.python"
+      ]
+    }
+  }
+}
