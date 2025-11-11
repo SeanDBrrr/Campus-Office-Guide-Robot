@@ -3,7 +3,10 @@
   "image": "osrf/ros:humble-desktop",
   "runArgs": ["--network=host"],
   "workspaceFolder": "/work",
-  "mounts": ["source=${localWorkspaceFolder},target=/work,type=bind"],
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/work,type=bind",
+    "source=gh_ssh_keys,target=/home/vscode/.ssh,type=volume"
+  ],
   "containerEnv": {
     "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp",
     "ROS_DOMAIN_ID": "17"
