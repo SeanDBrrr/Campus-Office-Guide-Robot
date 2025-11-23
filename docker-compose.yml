@@ -1,0 +1,60 @@
+x-common-env: &common-env
+  RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}
+  ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-17}
+
+x-ros-base: &ros-base
+  image: ${ROS_IMAGE_NANO:-dustynv/ros:humble-ros-base-l4t-r32.7.1}
+  network_mode: host
+  runtime: nvidia
+  working_dir: /work/ros2_ws
+  environment: *common-env
+  volumes:
+    - ${WORKSPACE_HOST:-/home/robi/ros2_ws_humble}:/work/ros2_ws
+  tty: true
+  stdin_open: true
+
+services:
+  # Long-running ROS container (good for drivers/bringup when detached)
+  ros2_nano:
+    <<: *ros-base
+    command: >
+      bash -lc 'echo "sourcing   /opt/ros/${ROS_DISTRO:-humble}/install/setup.bash";
+                source /opt/ros/${ROS_DISTRO:-humble}/install/setup.bash;
+                if [ -f /work/ros2_ws/install/setup.bash ]; then
+                  echo "sourcing   /work/ros2_ws/install/setup.bash";
+                  source /work/ros2_ws/install/setup.bash;
+                fi;
+                tail -f /dev/null'
+
+  # One-off interactive ROS shell (your terminal becomes a ROS shell)
+  ros_shell:
+    <<: *ros-base
+    entrypoint: []
+    command: >
+      bash -lc 'source /opt/ros/${ROS_DISTRO:-humble}/install/setup.bash;
+                [ -f /work/ros2_ws/install/setup.bash ] &&
+                  source /work/ros2_ws/install/setup.bash;
+                exec bash'
+
+  # Optional: code-server (web VS Code) managed by Compose
+  code:
+    image: ghcr.io/coder/code-server:4.89.1
+    # container_name: code-server   # (optional) safer to omit to avoid name clashes
+    ports:
+      - "127.0.0.1:8080:8080"       # reach via SSH tunnel from your PC
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      # Prefer hashed password if you set CODE_HASHED_PASSWORD in .env.
+      HASHED_PASSWORD: ${CODE_HASHED_PASSWORD:-}
+      PASSWORD: ${CODE_PASSWORD:-}
+    user: "${UID_GID:-1000:1000}"
+    volumes:
+      - ${CODE_DATA:-/home/robi/code-server-data}:/home/coder/.local/share/code-server
+      - ${WORKSPACE_HOST:-/home/robi/ros2_ws_humble}:/home/coder/project
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
